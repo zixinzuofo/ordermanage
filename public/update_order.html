@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>订单系统-修改</title>
+<script type="text/javascript" src="javascripts/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="javascripts/order.js"></script>
+</head>
+<body>
+
+<form>
+    请输入订单号：<input type="text" id="orderId">
+    <br>
+    新的订单状态：<input type="radio" name="orderStatus" id="orderStatus" value="生产中" checked>生产中
+                <input type="radio" name="orderStatus" id="orderStatus" value="化妆中">化妆中
+                <input type="radio" name="orderStatus" id="orderStatus" value="完成">完成
+</form>
+<input type="submit" onclick="updateOrderStatus()" value="修改订单状态"><br>
+<p id="myDiv"></p>
+
+</body>
+</html>

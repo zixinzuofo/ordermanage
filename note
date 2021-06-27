@@ -1,0 +1,61 @@
+- id_rsa
+ssh-keygen -t rsa -C "876853809@qq.com"
+
+- node
+sudo apt install nodejs -y
+
+-npm
+sudo apt install npm -y
+
+-pm2
+sudo npm install -g pm2
+
+- aws iam for ec2
+https://blog.csdn.net/u010478127/article/details/106850328
+
+- aws
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+- install nginx
+wget -qO - https://openresty.org/package/pubkey.gpg | sudo apt-key add - \
+&& sudo apt-get -y install software-properties-common \
+&& sudo add-apt-repository -y "deb http://openresty.org/package/ubuntu $(lsb_release -sc) main" \
+&& sudo apt-get update \
+&& sudo apt-get install -y libpcre3-dev \
+    libssl-dev perl make build-essential curl \
+&& sudo apt-get update \
+&& sudo apt-get install openresty -y
+
+sudo ln -s /usr/local/openresty/nginx/sbin/nginx /usr/local/bin/nginx
+
+- install mysql
+sudo apt-get update
+sudo apt-get install mysql-server
+sudo mysql_secure_installation
+sudo service mysql restart
+
+
+https://blog.csdn.net/u012572955/article/details/54600153
+sudo vi /etc/mysql/my.cnf
+[mysqld]
+table_open_cache = 128
+table_open_cache_instances = 1
+performance_schema_max_table_instances = 200
+table_definition_cache = 200
+default-time_zone='+8:00'
+
+[client]
+host=localhost
+user=root
+password='111111'
+
+set global validate_password_length=6;
+set global validate_password_policy='LOW';
+ALTER USER 'test'@'localhost' IDENTIFIED WITH MYSQL_NATIVE_PASSWORD BY '111111';
+
+- 修改时区
+tzselect
+cp /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
+

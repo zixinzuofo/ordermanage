@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>发送邮件</title>
+<script type="text/javascript" src="javascripts/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="javascripts/sendmail.js"></script>
+</head>
+<body>
+    <h1>发送邮件</h1>
+    <form>
+        <p>
+            <label for="name">用户名:</label>
+            <input type="text" id="name" name="name" placeholder="请输入用户名">
+        </p>
+        <p>
+            <label for="email">邮&nbsp;&nbsp;&nbsp;箱:</label>
+            <input type="email" id="email" name="email" placeholder="请输入邮箱">
+        </p>
+        <p>
+            <label for="message">内&nbsp;&nbsp;&nbsp;容:</label>
+            <input type="message" id="message" name="message" placeholder="请输入内容">
+        </p>
+    </form>
+    <input type="submit" onclick="sendMail()" value="发送">
+    <p id="myDiv"></p>
+</body>
+</html>

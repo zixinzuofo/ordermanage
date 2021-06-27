@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>注册</title>
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<script type="text/javascript" src="javascripts/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="javascripts/signup.js"></script>
+</head>
+<body>
+    <div class="well jumbotron">
+    <h1>注册页面</h1>
+    <form>
+        <p>
+            <label for="userName">用户名:</label>
+            <input type="text" id="userName" name="userName" placeholder="请输入用户名">
+        </p>
+        <p>
+            <label for="passWord">密&nbsp;&nbsp;&nbsp;码:</label>
+            <input type="password" id="password" name="password" placeholder="请输入密码">
+            <input type="checkbox" id="pwcheck" onchange="show_pwd()">显示密码
+        </p>
+        <p>
+            <label for="email">邮&nbsp;&nbsp;&nbsp;箱:</label>
+            <input type="email" id="email" name="email" placeholder="请输入邮箱">
+        </p>
+    </form>
+    <input type="submit" onclick="signup()" value="注册">
+    <a href="login.html">返回登录页面</a>
+    <p id="myDiv"></p>
+    </div>
+</body>
+</html>

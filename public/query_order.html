@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>订单系统-查询</title>
+<script type="text/javascript" src="javascripts/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="javascripts/order.js"></script>
+</head>
+<body>
+
+<form>
+    请输入订单号：<input type="text" id="orderId">
+</form>
+<input type="submit" onclick="queryOrderStatus()" value="查询订单状态">
+<p id="myDiv"></p>
+<table id="orderTable" border="1">
+    <tr>
+        <td>订单状态</td>
+        <td>创建时间</td>
+        <td>修改时间</td>
+    </tr>
+    <tr>
+        <td id="orderStatus"></td>
+        <td id="orderCreateTime"></td>
+        <td id="orderUpdateTime"></td>
+    </tr>
+</table>
+
+</body>
+</html>
