@@ -512,6 +512,10 @@ function updateOrderHandler(req, res, next) {
     log.debug('req body:', body);
     var id = body.id;
     log.debug("id:", id);
+    var orderPlacedDate = body.orderPlacedDate;
+    var year = orderPlacedDate.split('-')[0];
+    var month = orderPlacedDate.split('-')[1];
+    var originalMonth = '';
     tk.verifyToken(req.headers.authorization).catch(e => {
         log.error('fail to verify token:', e);
         res.send({'ret':errToken, 'msg':errcode.errToken});
@@ -528,6 +532,7 @@ function updateOrderHandler(req, res, next) {
         }
         return mysql.queryOrderById(id);
     }).then(function(data){
+        data = changeTimeZone(data);
         if (data.length==0) {
             var ret = errNoOrder;
             var msg = errcode.errNoOrder;
@@ -535,7 +540,19 @@ function updateOrderHandler(req, res, next) {
             res.send({'ret': ret, 'msg': msg});
             return new Promise(()=>{});
         }
-    }).then(()=>{
+        originalMonth = data[0].orderPlacedDate.split('-')[1]
+        return mysql.queryPrevNumber(year, month)
+    }).then((data)=>{
+        log.debug(data[0].monthNumber);
+        log.debug(month);
+        log.debug(originalMonth);
+        if (month!=originalMonth) {
+            if (data.length==0){
+                body.monthNumber = 1;
+            } else {
+                body.monthNumber = data[0].monthNumber + 1
+            }
+        }
         return mysql.updateOrder(body);
     }).then(()=>{
         var ret = success;

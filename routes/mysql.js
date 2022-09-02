@@ -280,20 +280,16 @@ exports.updateOrder = function updateOrder(order){
             } else {
                 var sql = 'update order_tbl set updator = ?, ';
                 for (var i = 0; i < config.orderFields.length; i++) {
-                    if (config.orderFields[i] != 'yearNumber' && config.orderFields[i] != 'monthNumber') {
-                        if (i!=config.orderFields.length-1) {
-                            sql += (config.orderFields[i] + ' = ?, ')
-                        } else {
-                            sql += (config.orderFields[i] + ' = ? ')
-                        }
+                    if (i!=config.orderFields.length-1) {
+                        sql += (config.orderFields[i] + ' = ?, ')
+                    } else {
+                        sql += (config.orderFields[i] + ' = ? ')
                     }
                 }
                 sql += 'where binary id = ?';
                 var sqlParams = [order.userName];
                 for (var i = 0; i < config.orderFields.length; i++) {
-                    if (config.orderFields[i] != 'yearNumber' && config.orderFields[i] != 'monthNumber') {
-                        sqlParams.push(order[config.orderFields[i]]);
-                    }
+                    sqlParams.push(order[config.orderFields[i]]);
                 }
                 sqlParams.push(order.id);
                 conn.query(sql, sqlParams, function (err) {
