@@ -546,12 +546,15 @@ function updateOrderHandler(req, res, next) {
         return mysql.queryPrevNumber(year, month)
     }).then((data)=>{
         if (month!=originalMonth&&year==originalYear) {
+            log.debug('month changed:', {'originalMonth':originalMonth, 'newMonth':month});
             if (data[0].monthNumber==null) {
                 body.monthNumber = 1;
             } else {
                 body.monthNumber = data[0].monthNumber + 1;
             }
         } else if (month!=originalMonth&&year!=originalYear) {
+            log.debug('month changed:', {'originalMonth':originalMonth, 'newMonth':month});
+            log.debug('year changed:', {'originalYear':originalYear, 'newYear':year});
             if (data[0].yearNumber==null) {
                 body.yearNumber = 1;
             } else {
@@ -562,6 +565,9 @@ function updateOrderHandler(req, res, next) {
             } else {
                 body.monthNumber = data[0].monthNumber + 1;
             }
+        } else if (month==originalMonth&&year==originalYear) {
+            body.yearNumber = data[0].yearNumber;
+            body.monthNumber = data[0].monthNumber;
         }
         return mysql.updateOrder(body);
     }).then(()=>{
