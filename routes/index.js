@@ -547,7 +547,7 @@ function updateOrderHandler(req, res, next) {
     }).then((data)=>{
         if (month!=originalMonth&&year==originalYear) {
             log.debug('month changed:', {'originalMonth':originalMonth, 'newMonth':month});
-            body.yearNumber = data[0].yearNumber;
+            body.yearNumber = data[0].yearNumber + 1;
             if (data[0].monthNumber==null) {
                 body.monthNumber = 1;
             } else {
