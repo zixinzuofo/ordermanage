@@ -541,8 +541,10 @@ function updateOrderHandler(req, res, next) {
             res.send({'ret': ret, 'msg': msg});
             return new Promise(()=>{});
         }
-        originalYear = data[0].orderPlacedDate.split('-')[0]
-        originalMonth = data[0].orderPlacedDate.split('-')[1]
+        originalYear = data[0].orderPlacedDate.split('-')[0];
+        originalMonth = data[0].orderPlacedDate.split('-')[1];
+        body.yearNumber = data[0].yearNumber;
+        body.monthNumber = data[0].monthNumber;
         return mysql.queryPrevNumber(year, month)
     }).then((data)=>{
         if (month!=originalMonth&&year==originalYear) {
@@ -566,9 +568,6 @@ function updateOrderHandler(req, res, next) {
             } else {
                 body.monthNumber = data[0].monthNumber + 1;
             }
-        } else if (month==originalMonth&&year==originalYear) {
-            body.yearNumber = data[0].yearNumber;
-            body.monthNumber = data[0].monthNumber;
         }
         return mysql.updateOrder(body);
     }).then(()=>{
