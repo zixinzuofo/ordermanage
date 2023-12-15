@@ -1,6 +1,3 @@
-- id_rsa
-ssh-keygen -t rsa -C "876853809@qq.com"
-
 - node
 sudo apt install nodejs -y
 
@@ -15,6 +12,7 @@ https://blog.csdn.net/u010478127/article/details/106850328
 
 - aws
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+sudo apt install unzip
 unzip awscliv2.zip
 sudo ./aws/install
 
@@ -51,11 +49,53 @@ host=localhost
 user=root
 password='111111'
 
-set global validate_password_length=6;
-set global validate_password_policy='LOW';
-ALTER USER 'test'@'localhost' IDENTIFIED WITH MYSQL_NATIVE_PASSWORD BY '111111';
+SET GLOBAL validate_password.length = 6;
+SET GLOBAL validate_password.policy='LOW';
+ALTER USER 'root'@'localhost' IDENTIFIED WITH MYSQL_NATIVE_PASSWORD BY '111111';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
 
 - 修改时区
 tzselect
 cp /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
+
+- 增加EC2访问S3的IAM角色
+aws s3 cp s3://dbbackup.df-ordermanage/ordermanage.sql.gz ordermanage.sql.gz
+gunzip ordermanage.sql.gz
+
+- 导入mysql数据
+mysql -uroot -p
+create database ordermanage;
+source ordermanage.sql
+
+- 下载ordermanage代码
+git clone https://github.com/zixinzuofo/ordermanage.git
+pm2 start ordermanage/bin/www --watch --name ordermanage
+
+- 修改nginx并重启
+cd /usr/local/openresty/nginx/conf
+sudo vi nginx.conf
+location /ordermanage/ {
+    proxy_pass http://localhost:9999;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+}
+sudo nginx -s reload
+
+- 测试
+curl -XPOST http://ec2_ip/ordermanage/login
+
+- 定时备份数据上传到s3
+mkdir dbbackup
+cd dbbackup
+touch mysqldump.sh
+-------
+#!/bin/bash
+
+echo 'start backup ordermanage database at time' $(date "+%Y-%m-%d %H:%M:%S")
+mysqldump --defaults-extra-file=/etc/mysql/my.cnf ordermanage | gzip > /home/ubuntu/dbbackup/ordermanage.sql.gz
+/usr/local/bin/aws s3 cp /home/ubuntu/dbbackup/ordermanage.sql.gz s3://dbbackup.df-ordermanage
+-------
+crontab -e
+0 8 * * * sh /home/ubuntu/dbbackup/mysqldump.sh > /home/ubuntu/dbbackup/mysqldump.log
 
