@@ -34,7 +34,7 @@ sudo apt-get install mysql-server
 sudo mysql_secure_installation
 sudo service mysql restart
 
-
+- mysql配置修改
 https://blog.csdn.net/u012572955/article/details/54600153
 sudo vi /etc/mysql/my.cnf
 [mysqld]
@@ -49,6 +49,7 @@ host=localhost
 user=root
 password='111111'
 
+mysql -uroot -p
 SET GLOBAL validate_password.length = 6;
 SET GLOBAL validate_password.policy='LOW';
 ALTER USER 'root'@'localhost' IDENTIFIED WITH MYSQL_NATIVE_PASSWORD BY '111111';
@@ -60,10 +61,11 @@ tzselect
 cp /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 
 - 增加EC2访问S3的IAM角色
-aws s3 cp s3://dbbackup.df-ordermanage/ordermanage.sql.gz ordermanage.sql.gz
-gunzip ordermanage.sql.gz
+在aws控制台操作
 
 - 导入mysql数据
+aws s3 cp s3://dbbackup.df-ordermanage/ordermanage.sql.gz ordermanage.sql.gz
+gunzip ordermanage.sql.gz
 mysql -uroot -p
 create database ordermanage;
 source ordermanage.sql
