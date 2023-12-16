@@ -99,5 +99,5 @@ mysqldump --defaults-extra-file=/etc/mysql/my.cnf ordermanage | gzip > /home/ubu
 /usr/local/bin/aws s3 cp /home/ubuntu/dbbackup/ordermanage.sql.gz s3://dbbackup.df-ordermanage
 -------
 crontab -e
-0 8 * * * sh /home/ubuntu/dbbackup/mysqldump.sh >> /home/ubuntu/dbbackup/mysqldump.log 2>&1
+0 8 * * * TZ='Asia/Shanghai' sh /home/ubuntu/dbbackup/mysqldump.sh >> /home/ubuntu/dbbackup/mysqldump.log 2>&1
 
