@@ -25,6 +25,8 @@ exports.init = function init() {
         return exports.headTblInit();
     }).then(()=>{
         return exports.paymentMethodTblInit();
+    }).then(()=>{
+        return exports.authenticCodeTblInit();
     }).catch((err)=>{
         log.error('fail to do mysql init:', err);
     });
@@ -177,6 +179,26 @@ exports.paymentMethodTblInit = function paymentMethodTblInit() {
                 reject(err);
             } else {
                 var sql = config.paymentMethodTblSql;
+                conn.query(sql, (err)=>{
+                    conn.release();
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            }
+        });
+    });
+}
+
+exports.authenticCodeTblInit = function authenticCodeTblInit() {
+    return new Promise((resolve, reject)=>{
+        pool.getConnection((err, conn)=>{
+            if (err) {
+                reject(err);
+            } else {
+                var sql = config.authenticCodeTblSql;
                 conn.query(sql, (err)=>{
                     conn.release();
                     if (err) {
@@ -1048,6 +1070,110 @@ exports.updateOrderFlag = function updateOrderFlag(userName, id, orderFlag){
                         reject(err);
                     } else {
                         resolve();
+                    }
+                });
+            }
+        });
+    });
+}
+
+exports.addAuthenticCode = function addAuthenticCode(authenticCode, productInfo) {
+    return new Promise(function (resolve, reject){
+        pool.getConnection(function(err, conn){
+            if (err) {
+                reject(err);
+            } else {
+                var sql = 'insert into authentic_code_tbl (authenticCode, productInfo) values (?, ?)';
+                sqlParams = [authenticCode, productInfo]
+                conn.query(sql, sqlParams, function (err) {
+                    conn.release();
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            }
+        });
+    });
+}
+
+exports.deleteAuthenticCode = function deleteAuthenticCode(authenticCode) {
+    return new Promise(function (resolve, reject){
+        pool.getConnection(function(err, conn){
+            if (err) {
+                reject(err);
+            } else {
+                var sql = 'delete from authentic_code_tbl where binary authenticCode = ?';
+                sqlParams = [authenticCode];
+                conn.query(sql, sqlParams, function (err) {
+                    conn.release();
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            }
+        });
+    });
+}
+
+exports.updateAuthenticCode = function updateAuthenticCode(authenticCode, productInfo) {
+    return new Promise(function (resolve, reject){
+        pool.getConnection(function(err, conn){
+            if (err) {
+                reject(err);
+            } else {
+                var sql = 'update authentic_code_tbl set productInfo = ? where binary authenticCode = ?';
+                sqlParams = [productInfo, authenticCode];
+                conn.query(sql, sqlParams, function (err) {
+                    conn.release();
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            }
+        });
+    });
+}
+
+exports.queryAuthenticCode = function queryAuthenticCode(authenticCode) {
+    return new Promise(function (resolve, reject){
+        pool.getConnection(function(err, conn){
+            if (err) {
+                reject(err);
+            } else {
+                var sql = 'select * from authentic_code_tbl where binary authenticCode = ?';
+                sqlParams = [authenticCode];
+                conn.query(sql, sqlParams, function (err, results) {
+                    conn.release();
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(results);
+                    }
+                });
+            }
+        });
+    });
+}
+
+exports.queryAllAuthenticCodes = function queryAllAuthenticCodes() {
+    return new Promise(function (resolve, reject){
+        pool.getConnection(function(err, conn){
+            if (err) {
+                reject(err);
+            } else {
+                var sql = 'select * from authentic_code_tbl';
+                conn.query(sql, function (err, results) {
+                    conn.release();
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(results);
                     }
                 });
             }

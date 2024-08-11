@@ -1484,6 +1484,200 @@ function queryPaymentMethodHandler(req, res, next) {
     });
 }
 
+function addAuthenticCodeHandler(req, res, next) {
+    log.debug('req headers:', req.headers);
+    var body = req.body;
+    log.debug('req body:', body);
+    var authenticCode = body.authenticCode;
+    log.debug("authenticCode:", authenticCode);
+    var productInfo = body.productInfo;
+    log.debug("productInfo:", productInfo);
+    tk.verifyToken(req.headers.authorization).catch(e => {
+        log.error('fail to verify token:', e);
+        res.send({'ret':errToken, 'msg':errcode.errToken});
+        return new Promise(()=>{});
+    }).then((data)=>{
+        if (body.userName != data.userName) {
+            log.debug('req userName:', body.userName);
+            log.debug('parsed userName:', data.userName)
+            ret = errUserNotMatch;
+            msg = errcode.errUserNotMatch;
+            log.error('fail to add authenticCode:', {'ret':ret, 'msg':msg});
+            res.send({'ret':ret, 'msg':msg});
+            return new Promise(()=>{});
+        }
+        return mysql.addAuthenticCode(authenticCode, productInfo);
+    }).then(()=>{
+        var ret = success;
+        var msg = errcode.success;
+        log.debug('add authenticCode success')
+        res.send({'ret': ret, 'msg': msg});
+    }).catch(function(err){
+        var ret = errMysql;
+        var msg = err;
+        log.error('fail to add authenticCode:', {'ret':ret, 'msg':msg});
+        res.send({'ret':ret, 'msg':msg});
+    });
+}
+
+function deleteAuthenticCodeHandler(req, res, next) {
+    log.debug('req headers:', req.headers);
+    var body = req.body;
+    log.debug('req body:', body);
+    var authenticCode = body.authenticCode;
+    log.debug("authenticCode:", authenticCode);
+    tk.verifyToken(req.headers.authorization).catch(e => {
+        log.error('fail to verify token:', e);
+        res.send({'ret':errToken, 'msg':errcode.errToken});
+        return new Promise(()=>{});
+    }).then((data)=>{
+        if (body.userName != data.userName) {
+            log.debug('req userName:', body.userName);
+            log.debug('parsed userName:', data.userName)
+            ret = errUserNotMatch;
+            msg = errcode.errUserNotMatch;
+            log.error('fail to delete authenticCode:', {'ret':ret, 'msg':msg});
+            res.send({'ret':ret, 'msg':msg});
+            return new Promise(()=>{});
+        }
+        return mysql.deleteAuthenticCode(authenticCode);
+    }).then(()=>{
+        var ret = success;
+        var msg = errcode.success;
+        log.debug('delete authenticCode success')
+        res.send({'ret': ret, 'msg': msg});
+    }).catch(function(err){
+        var ret = errMysql;
+        var msg = err;
+        log.error('fail to delete authenticCode:', {'ret':ret, 'msg':msg});
+        res.send({'ret':ret, 'msg':msg});
+    });
+}
+
+function updateAuthenticCodeHandler(req, res, next) {
+    log.debug('req headers:', req.headers);
+    var body = req.body;
+    log.debug('req body:', body);
+    var authenticCode = body.authenticCode;
+    var productInfo = body.productInfo;
+    log.debug("authenticCode:", authenticCode);
+    log.debug("productInfo:", productInfo);
+    tk.verifyToken(req.headers.authorization).catch(e => {
+        log.error('fail to verify token:', e);
+        res.send({'ret':errToken, 'msg':errcode.errToken});
+        return new Promise(()=>{});
+    }).then((data)=>{
+        if (body.userName != data.userName) {
+            log.debug('req userName:', body.userName);
+            log.debug('parsed userName:', data.userName)
+            ret = errUserNotMatch;
+            msg = errcode.errUserNotMatch;
+            log.error('fail to update authenticCode:', {'ret':ret, 'msg':msg});
+            res.send({'ret':ret, 'msg':msg});
+            return new Promise(()=>{});
+        }
+        return mysql.updateAuthenticCode(authenticCode, productInfo);
+    }).then(()=>{
+        var ret = success;
+        var msg = errcode.success;
+        log.debug('update authenticCode success')
+        res.send({'ret': ret, 'msg': msg});
+    }).catch(function(err){
+        var ret = errMysql;
+        var msg = err;
+        log.error('fail to update authenticCode:', {'ret':ret, 'msg':msg});
+        res.send({'ret':ret, 'msg':msg});
+    });
+}
+
+function queryAuthenticCodeNoAuthHandler(req, res, next) {
+    log.debug('req headers:', req.headers);
+    var body = req.body;
+    log.debug('req body:', body);
+    var authenticCode = body.authenticCode
+    log.debug("authenticCode:", authenticCode);
+    mysql.queryAuthenticCode(authenticCode).then((data)=>{
+        log.debug('authenticCode:', data);
+        var ret = success;
+        var msg = errcode.success;
+        log.debug('query authenticCode success')
+        res.send({'ret': ret, 'msg': msg, 'data': data});
+    }).catch(function(err){
+        var ret = errMysql;
+        var msg = err;
+        log.error('fail to query authenticCode:', {'ret':ret, 'msg':msg});
+        res.send({'ret':ret, 'msg':msg});
+    });
+}
+
+function queryAuthenticCodeHandler(req, res, next) {
+    log.debug('req headers:', req.headers);
+    var body = req.body;
+    log.debug('req body:', body);
+    var authenticCode = body.authenticCode
+    log.debug("authenticCode:", authenticCode);
+    tk.verifyToken(req.headers.authorization).catch(e => {
+        log.error('fail to verify token:', e);
+        res.send({'ret':errToken, 'msg':errcode.errToken});
+        return new Promise(()=>{});
+    }).then((data)=>{
+        if (body.userName != data.userName) {
+            log.debug('req userName:', body.userName);
+            log.debug('parsed userName:', data.userName)
+            ret = errUserNotMatch;
+            msg = errcode.errUserNotMatch;
+            log.error('fail to query authenticCode:', {'ret':ret, 'msg':msg});
+            res.send({'ret':ret, 'msg':msg});
+            return new Promise(()=>{});
+        }
+        return mysql.queryAuthenticCode(authenticCode);
+    }).then((data)=>{
+        log.debug('authenticCode:', data);
+        var ret = success;
+        var msg = errcode.success;
+        log.debug('query authenticCode success')
+        res.send({'ret': ret, 'msg': msg, 'data': data});
+    }).catch(function(err){
+        var ret = errMysql;
+        var msg = err;
+        log.error('fail to query authenticCode:', {'ret':ret, 'msg':msg});
+        res.send({'ret':ret, 'msg':msg});
+    });
+}
+
+function queryAllAuthenticCodesHandler(req, res, next) {
+    log.debug('req headers:', req.headers);
+    var body = req.body;
+    log.debug('req body:', body);
+    tk.verifyToken(req.headers.authorization).catch(e => {
+        log.error('fail to verify token:', e);
+        res.send({'ret':errToken, 'msg':errcode.errToken});
+        return new Promise(()=>{});
+    }).then((data)=>{
+        if (body.userName != data.userName) {
+            log.debug('req userName:', body.userName);
+            log.debug('parsed userName:', data.userName)
+            ret = errUserNotMatch;
+            msg = errcode.errUserNotMatch;
+            log.error('fail to query all authenticCodes:', {'ret':ret, 'msg':msg});
+            res.send({'ret':ret, 'msg':msg});
+            return new Promise(()=>{});
+        }
+        return mysql.queryAllAuthenticCodes();
+    }).then((data)=>{
+        log.debug('all authenticCodes:', data);
+        var ret = success;
+        var msg = errcode.success;
+        log.debug('query all authenticCodes success')
+        res.send({'ret': ret, 'msg': msg, 'data': data});
+    }).catch(function(err){
+        var ret = errMysql;
+        var msg = err;
+        log.error('fail to query all authenticCodes:', {'ret':ret, 'msg':msg});
+        res.send({'ret':ret, 'msg':msg});
+    });
+}
+
 router.post('/ordermanage/login', (req, res, next) => {
     loginHandler(req, res, next);
 });
@@ -1630,6 +1824,30 @@ router.post('/ordermanage/paymentMethod/update', (req, res, next) => {
 
 router.post('/ordermanage/paymentMethod/query', (req, res, next) => {
     queryPaymentMethodHandler(req, res, next);
+})
+
+router.post('/ordermanage/authenticCode/add', (req, res, next) => {
+    addAuthenticCodeHandler(req, res, next);
+})
+
+router.post('/ordermanage/authenticCode/delete', (req, res, next) => {
+    deleteAuthenticCodeHandler(req, res, next);
+})
+
+router.post('/ordermanage/authenticCode/update', (req, res, next) => {
+    updateAuthenticCodeHandler(req, res, next);
+})
+
+router.post('/ordermanage/authenticCode/noauth/query', (req, res, next) => {
+    queryAuthenticCodeNoAuthHandler(req, res, next);
+})
+
+router.post('/ordermanage/authenticCode/query', (req, res, next) => {
+    queryAuthenticCodeHandler(req, res, next);
+})
+
+router.post('/ordermanage/authenticCode/query/all', (req, res, next) => {
+    queryAllAuthenticCodesHandler(req, res, next);
 })
 
 module.exports = router;

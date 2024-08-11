@@ -164,5 +164,12 @@ module.exports = {
                     `paymentMethod` varchar(256) DEFAULT NULL,\
                     PRIMARY KEY (`id`),\
                     UNIQUE KEY `paymentMethod` (`paymentMethod`)\
-                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8",
+    authenticCodeTblSql: "CREATE TABLE if not exists `authentic_code_tbl` (\
+                  `id` int unsigned NOT NULL AUTO_INCREMENT,\
+                  `authenticCode` varchar(256) NOT NULL,\
+                  `productInfo` varchar(256) NOT NULL DEFAULT '',\
+                  PRIMARY KEY (`id`),\
+                  UNIQUE KEY `authenticCode` (`authenticCode`)\
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
 }
