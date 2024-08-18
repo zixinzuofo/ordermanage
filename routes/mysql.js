@@ -1119,7 +1119,7 @@ exports.deleteAuthenticCode = function deleteAuthenticCode(authenticCode) {
     });
 }
 
-exports.updateAuthenticCode = function updateAuthenticCode(authenticCode, productInfo) {
+exports.updateAuthCodeProdInfo = function updateAuthCodeProdInfo(authenticCode, productInfo) {
     return new Promise(function (resolve, reject){
         pool.getConnection(function(err, conn){
             if (err) {
@@ -1127,6 +1127,27 @@ exports.updateAuthenticCode = function updateAuthenticCode(authenticCode, produc
             } else {
                 var sql = 'update authentic_code_tbl set productInfo = ? where binary authenticCode = ?';
                 sqlParams = [productInfo, authenticCode];
+                conn.query(sql, sqlParams, function (err) {
+                    conn.release();
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            }
+        });
+    });
+}
+
+exports.updateAuthCodeStatus = function updateAuthCodeStatus(authenticCode, status) {
+    return new Promise(function (resolve, reject){
+        pool.getConnection(function(err, conn){
+            if (err) {
+                reject(err);
+            } else {
+                var sql = 'update authentic_code_tbl set status = ? where binary authenticCode = ?';
+                sqlParams = [status, authenticCode];
                 conn.query(sql, sqlParams, function (err) {
                     conn.release();
                     if (err) {

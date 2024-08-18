@@ -169,6 +169,7 @@ module.exports = {
                   `id` int unsigned NOT NULL AUTO_INCREMENT,\
                   `authenticCode` varchar(256) NOT NULL,\
                   `productInfo` varchar(256) NOT NULL DEFAULT '',\
+                  `status` varchar(64) NOT NULL DEFAULT 'nonactivated',\
                   PRIMARY KEY (`id`),\
                   UNIQUE KEY `authenticCode` (`authenticCode`)\
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8"

@@ -1554,7 +1554,7 @@ function deleteAuthenticCodeHandler(req, res, next) {
     });
 }
 
-function updateAuthenticCodeHandler(req, res, next) {
+function updateAuthCodeProdInfoHandler(req, res, next) {
     log.debug('req headers:', req.headers);
     var body = req.body;
     log.debug('req body:', body);
@@ -1572,20 +1572,41 @@ function updateAuthenticCodeHandler(req, res, next) {
             log.debug('parsed userName:', data.userName)
             ret = errUserNotMatch;
             msg = errcode.errUserNotMatch;
-            log.error('fail to update authenticCode:', {'ret':ret, 'msg':msg});
+            log.error('fail to update authCodeProdInfo:', {'ret':ret, 'msg':msg});
             res.send({'ret':ret, 'msg':msg});
             return new Promise(()=>{});
         }
-        return mysql.updateAuthenticCode(authenticCode, productInfo);
+        return mysql.updateAuthCodeProdInfo(authenticCode, productInfo);
     }).then(()=>{
         var ret = success;
         var msg = errcode.success;
-        log.debug('update authenticCode success')
+        log.debug('update authCodeProdInfo success')
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
         var msg = err;
-        log.error('fail to update authenticCode:', {'ret':ret, 'msg':msg});
+        log.error('fail to update authCodeProdInfo:', {'ret':ret, 'msg':msg});
+        res.send({'ret':ret, 'msg':msg});
+    });
+}
+
+function updateAuthCodeStatusHandler(req, res, next) {
+    log.debug('req headers:', req.headers);
+    var body = req.body;
+    log.debug('req body:', body);
+    var authenticCode = body.authenticCode;
+    var status = body.status;
+    log.debug("authenticCode:", authenticCode);
+    log.debug("status:", status);
+    mysql.updateAuthCodeStatus(authenticCode, status).then((data)=>{
+        var ret = success;
+        var msg = errcode.success;
+        log.debug('update authCodeStatus success')
+        res.send({'ret': ret, 'msg': msg});
+    }).catch(function(err){
+        var ret = errMysql;
+        var msg = err;
+        log.error('fail to update authCodeStatus:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
 }
@@ -1834,8 +1855,8 @@ router.post('/ordermanage/authenticCode/delete', (req, res, next) => {
     deleteAuthenticCodeHandler(req, res, next);
 })
 
-router.post('/ordermanage/authenticCode/update', (req, res, next) => {
-    updateAuthenticCodeHandler(req, res, next);
+router.post('/ordermanage/authenticCode/productInfo/update', (req, res, next) => {
+    updateAuthCodeProdInfoHandler(req, res, next);
 })
 
 router.post('/ordermanage/authenticCode/noauth/query', (req, res, next) => {
