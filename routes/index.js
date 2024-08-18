@@ -1859,6 +1859,10 @@ router.post('/ordermanage/authenticCode/productInfo/update', (req, res, next) =>
     updateAuthCodeProdInfoHandler(req, res, next);
 })
 
+router.post('/ordermanage/authenticCode/status/update', (req, res, next) => {
+    updateAuthCodeStatusHandler(req, res, next);
+})
+
 router.post('/ordermanage/authenticCode/noauth/query', (req, res, next) => {
     queryAuthenticCodeNoAuthHandler(req, res, next);
 })
