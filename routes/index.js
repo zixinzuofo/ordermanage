@@ -1598,6 +1598,42 @@ function updateAuthCodeStatusHandler(req, res, next) {
     var status = body.status;
     log.debug("authenticCode:", authenticCode);
     log.debug("status:", status);
+    tk.verifyToken(req.headers.authorization).catch(e => {
+        log.error('fail to verify token:', e);
+        res.send({'ret':errToken, 'msg':errcode.errToken});
+        return new Promise(()=>{});
+    }).then((data)=>{
+        if (body.userName != data.userName) {
+            log.debug('req userName:', body.userName);
+            log.debug('parsed userName:', data.userName)
+            ret = errUserNotMatch;
+            msg = errcode.errUserNotMatch;
+            log.error('fail to update authCodeStatus:', {'ret':ret, 'msg':msg});
+            res.send({'ret':ret, 'msg':msg});
+            return new Promise(()=>{});
+        }
+        return mysql.updateAuthCodeStatus(authenticCode, status);
+    }).then((data)=>{
+        var ret = success;
+        var msg = errcode.success;
+        log.debug('update authCodeStatus success')
+        res.send({'ret': ret, 'msg': msg});
+    }).catch(function(err){
+        var ret = errMysql;
+        var msg = err;
+        log.error('fail to update authCodeStatus:', {'ret':ret, 'msg':msg});
+        res.send({'ret':ret, 'msg':msg});
+    });
+}
+
+function updateAuthCodeStatusNoauthHandler(req, res, next) {
+    log.debug('req headers:', req.headers);
+    var body = req.body;
+    log.debug('req body:', body);
+    var authenticCode = body.authenticCode;
+    var status = body.status;
+    log.debug("authenticCode:", authenticCode);
+    log.debug("status:", status);
     mysql.updateAuthCodeStatus(authenticCode, status).then((data)=>{
         var ret = success;
         var msg = errcode.success;
@@ -1861,6 +1897,10 @@ router.post('/ordermanage/authenticCode/productInfo/update', (req, res, next) =>
 
 router.post('/ordermanage/authenticCode/status/update', (req, res, next) => {
     updateAuthCodeStatusHandler(req, res, next);
+})
+
+router.post('/ordermanage/authenticCode/status/noauth/update', (req, res, next) => {
+    updateAuthCodeStatusNoAuthHandler(req, res, next);
 })
 
 router.post('/ordermanage/authenticCode/noauth/query', (req, res, next) => {
