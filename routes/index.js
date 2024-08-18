@@ -1626,7 +1626,7 @@ function updateAuthCodeStatusHandler(req, res, next) {
     });
 }
 
-function updateAuthCodeStatusNoauthHandler(req, res, next) {
+function updateAuthCodeStatusNoAuthHandler(req, res, next) {
     log.debug('req headers:', req.headers);
     var body = req.body;
     log.debug('req body:', body);
