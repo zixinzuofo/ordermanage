@@ -1951,4 +1951,8 @@ router.post('/ordermanage/authenticCode/query/all', (req, res, next) => {
     queryAllAuthenticCodesHandler(req, res, next);
 })
 
+router.post('/ordermanage/authenticCode/availability/update', (req, res, next) => {
+    updateAuthCodeAvailabilityHandler(req, res, next);
+})
+
 module.exports = router;
