@@ -1148,10 +1148,12 @@ exports.updateAuthCodeStatus = function updateAuthCodeStatus(authenticCode, stat
             } else {
                 var sql = 'update authentic_code_tbl set status = ? where binary authenticCode = ?';
                 sqlParams = [status, authenticCode];
-                conn.query(sql, sqlParams, function (err) {
+                conn.query(sql, sqlParams, function (err, results) {
                     conn.release();
                     if (err) {
                         reject(err);
+                    } else if (results.affectedRows === 0) {
+                        reject(new Error('No rows were updated. The authenticCode may not exist or the status is already set as requested.'));
                     } else {
                         resolve();
                     }
@@ -1210,7 +1212,7 @@ exports.updateAuthCodeAvailability = function updateAuthCodeAvailability(authent
             } else {
                 var sql = 'update authentic_code_tbl set availability = ? where binary authenticCode = ?';
                 sqlParams = [availability, authenticCode];
-                conn.query(sql, sqlParams, function (err) {
+                conn.query(sql, sqlParams, function (err, results) {
                     conn.release();
                     if (err) {
                         reject(err);
