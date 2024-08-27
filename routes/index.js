@@ -155,7 +155,7 @@ function queryAllUsersHandler(req, res, next) {
         res.send({'ret':ret, 'msg':msg, 'data':data});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to query all users:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -203,7 +203,7 @@ function queryUserPermissionHandler(req, res, next) {
         res.send({'ret':ret, 'msg':msg, 'data':data});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to query permission by userName:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -251,7 +251,7 @@ function updateUserPermissionHandler(req, res, next) {
         res.send({'ret':ret, 'msg':msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to update permission:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -296,7 +296,7 @@ function generateVerifyCodeHandler(req, res, next) {
         res.send({'ret':ret, 'msg':msg});
     }).catch((err)=>{
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to generate verifyCode:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -351,7 +351,7 @@ function resetPasswordHandler(req, res, next) {
         res.send({'ret':ret, 'msg':msg});
     }).catch((err)=>{
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to reset password:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -401,7 +401,7 @@ function updatePasswordHandler(req, res, next) {
         res.send({'ret':ret, 'msg':msg});
     }).catch((err)=>{
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to update password:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -456,7 +456,7 @@ function addOrderHandler(req, res, next) {
         res.send({'ret':ret, 'msg':msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to add order:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -500,7 +500,7 @@ function deleteOrderHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch((err)=>{
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to delete order:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -577,7 +577,7 @@ function updateOrderHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch((err)=>{
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to update order:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -623,7 +623,7 @@ function updateCheckStatusHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch((err)=>{
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to update checkStatus:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -669,7 +669,7 @@ function updateOrderFlagHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch((err)=>{
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to update orderFlag:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -703,7 +703,7 @@ function queryOrderByMonthHandler(req, res, next) {
         res.send({'ret':ret, 'msg':msg, 'data':data});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to query order by month:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -738,7 +738,7 @@ function queryOrderByDateHandler(req, res, next) {
         res.send({'ret':ret, 'msg':msg, 'data':data});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to query order by date:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -772,7 +772,7 @@ function queryOrderByOrderIdHandler(req, res, next) {
         res.send({'ret':ret, 'msg':msg, 'data':data});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to query order by orderId:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -806,7 +806,7 @@ function queryOrderByBrandNameHandler(req, res, next) {
         res.send({'ret':ret, 'msg':msg, 'data':data});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to query order by brandName:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -840,7 +840,7 @@ function queryOrderBySalesRepHandler(req, res, next) {
         res.send({'ret':ret, 'msg':msg, 'data':data});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to query order by salesRep:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -878,7 +878,7 @@ function queryNumbersHandler(req, res, next) {
         res.send({'ret':ret, 'msg':msg, 'yearNumber':yearNumber, 'monthNumber':monthNumber});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to query numbers:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -896,7 +896,7 @@ function querySignupCodeHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg, 'signupCode': signupCode});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to query signupCode:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -930,7 +930,7 @@ function updateSignupCodeHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to update signupCode:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -964,7 +964,7 @@ function addShippingAgentHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to add shippingAgent:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -998,7 +998,7 @@ function deleteShippingAgentHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to delete shippingAgent:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1034,7 +1034,7 @@ function updateShippingAgentHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to update shippingAgent:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1067,7 +1067,7 @@ function queryShippingAgentHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg, 'data': data});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to query shippingAgent:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1101,7 +1101,7 @@ function addBrandNameHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to add brandName:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1135,7 +1135,7 @@ function deleteBrandNameHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to delete brandName:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1171,7 +1171,7 @@ function updateBrandNameHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to update brandName:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1204,7 +1204,7 @@ function queryBrandNameHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg, 'data': data});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to query brandName:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1238,7 +1238,7 @@ function addHeadHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to add head:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1272,7 +1272,7 @@ function deleteHeadHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to delete head:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1308,7 +1308,7 @@ function updateHeadHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to update head:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1341,7 +1341,7 @@ function queryHeadHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg, 'data': data});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to query head:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1375,7 +1375,7 @@ function addPaymentMethodHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to add paymentMethod:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1409,7 +1409,7 @@ function deletePaymentMethodHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to delete paymentMethod:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1445,7 +1445,7 @@ function updatePaymentMethodHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to update paymentMethod:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1478,7 +1478,7 @@ function queryPaymentMethodHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg, 'data': data});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to query paymentMethod:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1514,7 +1514,7 @@ function addAuthenticCodeHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to add authenticCode:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1548,7 +1548,7 @@ function deleteAuthenticCodeHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to delete authenticCode:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1584,7 +1584,7 @@ function updateAuthCodeProdInfoHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to update authCodeProdInfo:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1620,7 +1620,7 @@ function updateAuthCodeStatusHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to update authCodeStatus:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1641,7 +1641,7 @@ function updateAuthCodeStatusNoAuthHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to update authCodeStatus:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1661,7 +1661,7 @@ function queryAuthenticCodeNoAuthHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg, 'data': data});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to query authenticCode:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1696,7 +1696,7 @@ function queryAuthenticCodeHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg, 'data': data});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to query authenticCode:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
@@ -1729,7 +1729,7 @@ function queryAllAuthenticCodesHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg, 'data': data});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to query all authenticCodes:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
