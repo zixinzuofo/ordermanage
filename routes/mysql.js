@@ -1214,6 +1214,8 @@ exports.updateAuthCodeAvailability = function updateAuthCodeAvailability(authent
                     conn.release();
                     if (err) {
                         reject(err);
+                    } else if (results.affectedRows === 0) {
+                        reject(new Error('No rows were updated. The authenticCode may not exist or the availability is already set as requested.'));
                     } else {
                         resolve();
                     }
