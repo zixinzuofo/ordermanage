@@ -1765,7 +1765,7 @@ function updateAuthCodeAvailabilityHandler(req, res, next) {
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
-        var msg = err;
+        var msg = err.message;
         log.error('fail to update authCodeAvailability:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
