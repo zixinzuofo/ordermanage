@@ -1106,10 +1106,12 @@ exports.deleteAuthenticCode = function deleteAuthenticCode(authenticCode) {
             } else {
                 var sql = 'delete from authentic_code_tbl where binary authenticCode = ?';
                 sqlParams = [authenticCode];
-                conn.query(sql, sqlParams, function (err) {
+                conn.query(sql, sqlParams, function (err, results) {
                     conn.release();
                     if (err) {
                         reject(err);
+                    } else if (results.affectedRows === 0) {
+                        reject(new Error('No rows were deleted. The authenticCode may not exist.'));
                     } else {
                         resolve();
                     }
@@ -1127,10 +1129,12 @@ exports.updateAuthCodeProdInfo = function updateAuthCodeProdInfo(authenticCode, 
             } else {
                 var sql = 'update authentic_code_tbl set productInfo = ? where binary authenticCode = ?';
                 sqlParams = [productInfo, authenticCode];
-                conn.query(sql, sqlParams, function (err) {
+                conn.query(sql, sqlParams, function (err, results) {
                     conn.release();
                     if (err) {
                         reject(err);
+                    } else if (results.affectedRows === 0) {
+                        reject(new Error('No rows were updated. The authenticCode may not exist or the productInfo is already set as requested.'));
                     } else {
                         resolve();
                     }
