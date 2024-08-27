@@ -1735,6 +1735,42 @@ function queryAllAuthenticCodesHandler(req, res, next) {
     });
 }
 
+function updateAuthCodeAvailabilityHandler(req, res, next) {
+    log.debug('req headers:', req.headers);
+    var body = req.body;
+    log.debug('req body:', body);
+    var authenticCode = body.authenticCode;
+    var availability = body.availability;
+    log.debug("authenticCode:", authenticCode);
+    log.debug("availability:", availability);
+    tk.verifyToken(req.headers.authorization).catch(e => {
+        log.error('fail to verify token:', e);
+        res.send({'ret':errToken, 'msg':errcode.errToken});
+        return new Promise(()=>{});
+    }).then((data)=>{
+        if (body.userName != data.userName) {
+            log.debug('req userName:', body.userName);
+            log.debug('parsed userName:', data.userName)
+            ret = errUserNotMatch;
+            msg = errcode.errUserNotMatch;
+            log.error('fail to update authCodeavAilability:', {'ret':ret, 'msg':msg});
+            res.send({'ret':ret, 'msg':msg});
+            return new Promise(()=>{});
+        }
+        return mysql.updateAuthCodeAvailability(authenticCode, availability);
+    }).then((data)=>{
+        var ret = success;
+        var msg = errcode.success;
+        log.debug('update authCodeAvailability success')
+        res.send({'ret': ret, 'msg': msg});
+    }).catch(function(err){
+        var ret = errMysql;
+        var msg = err;
+        log.error('fail to update authCodeAvailability:', {'ret':ret, 'msg':msg});
+        res.send({'ret':ret, 'msg':msg});
+    });
+}
+
 router.post('/ordermanage/login', (req, res, next) => {
     loginHandler(req, res, next);
 });

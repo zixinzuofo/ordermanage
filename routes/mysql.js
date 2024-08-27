@@ -1201,3 +1201,24 @@ exports.queryAllAuthenticCodes = function queryAllAuthenticCodes() {
         });
     });
 }
+
+exports.updateAuthCodeAvailability = function updateAuthCodeAvailability(authenticCode, availability) {
+    return new Promise(function (resolve, reject){
+        pool.getConnection(function(err, conn){
+            if (err) {
+                reject(err);
+            } else {
+                var sql = 'update authentic_code_tbl set availability = ? where binary authenticCode = ?';
+                sqlParams = [availability, authenticCode];
+                conn.query(sql, sqlParams, function (err) {
+                    conn.release();
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            }
+        });
+    });
+}
