@@ -1722,7 +1722,7 @@ function queryAllAuthenticCodesHandler(req, res, next) {
         }
         return mysql.queryAllAuthenticCodes();
     }).then((data)=>{
-        // log.debug('all authenticCodes:', data);
+        log.debug('length of authenticCodes:', data.length);
         var ret = success;
         var msg = errcode.success;
         log.debug('query all authenticCodes success')
