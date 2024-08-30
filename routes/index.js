@@ -2078,4 +2078,8 @@ router.post('/ordermanage/authenticCode/availability/update', (req, res, next) =
     updateAuthCodeAvailabilityHandler(req, res, next);
 })
 
+router.post('/ordermanage/authenticCode/availability/update/batch', (req, res, next) => {
+    updateBatchAuthCodesAvailabilityHandler(req, res, next);
+})
+
 module.exports = router;
