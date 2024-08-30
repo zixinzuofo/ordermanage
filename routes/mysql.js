@@ -1098,6 +1098,27 @@ exports.addAuthCode = function addAuthCode(authenticCode, productInfo, userName)
     });
 }
 
+exports.addBatchAuthCodes = function addBatchAuthCodes(authCoddes, userName) {
+    return new Promise(function (resolve, reject){
+        pool.getConnection(function(err, conn){
+            if (err) {
+                reject(err);
+            } else {
+                var sql = 'insert into authentic_code_tbl (authenticCode, productInfo, creator, updator) values (?, ?, ?, ?)';
+                var sqlParams = authCodes.map(code => [code.authenticCode, code.productInfo, userName, userName]);
+                conn.query(sql, sqlParams, function (err) {
+                    conn.release();
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            }
+        });
+    });
+}
+
 exports.deleteAuthCode = function deleteAuthCode(authenticCode) {
     return new Promise(function (resolve, reject){
         pool.getConnection(function(err, conn){

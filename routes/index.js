@@ -1528,6 +1528,38 @@ function addAuthCodeHandler(req, res, next) {
     });
 }
 
+function addBatchAuthCodesHandler(req, res, next) {
+    log.debug('req headers:', req.headers);
+    var body = req.body;
+    log.debug('req body:', body);
+    tk.verifyToken(req.headers.authorization).catch(e => {
+        log.error('fail to verify token:', e);
+        res.send({'ret':errToken, 'msg':errcode.errToken});
+        return new Promise(()=>{});
+    }).then((data)=>{
+        if (body.userName != data.userName) {
+            log.debug('req userName:', body.userName);
+            log.debug('parsed userName:', data.userName)
+            ret = errUserNotMatch;
+            msg = errcode.errUserNotMatch;
+            log.error('fail to add batchAuthCodes:', {'ret':ret, 'msg':msg});
+            res.send({'ret':ret, 'msg':msg});
+            return new Promise(()=>{});
+        }
+        return mysql.addBatchAuthCodes(body.data, body.userName);
+    }).then(()=>{
+        var ret = success;
+        var msg = errcode.success;
+        log.debug('add batchAuthCodes success')
+        res.send({'ret': ret, 'msg': msg});
+    }).catch(function(err){
+        var ret = errMysql;
+        var msg = err.message;
+        log.error('fail to add batchAuthCodes:', {'ret':ret, 'msg':msg});
+        res.send({'ret':ret, 'msg':msg});
+    });
+}
+
 function deleteAuthCodeHandler(req, res, next) {
     log.debug('req headers:', req.headers);
     var body = req.body;
@@ -1968,6 +2000,10 @@ router.post('/ordermanage/paymentMethod/query', (req, res, next) => {
 
 router.post('/ordermanage/authenticCode/add', (req, res, next) => {
     addAuthCodeHandler(req, res, next);
+})
+
+router.post('/ordermanage/authenticCode/add/batch', (req, res, next) => {
+    addBatchAuthCodes(req, res, next);
 })
 
 router.post('/ordermanage/authenticCode/delete', (req, res, next) => {
