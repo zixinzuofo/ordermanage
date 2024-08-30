@@ -2003,7 +2003,7 @@ router.post('/ordermanage/authenticCode/add', (req, res, next) => {
 })
 
 router.post('/ordermanage/authenticCode/add/batch', (req, res, next) => {
-    addBatchAuthCodes(req, res, next);
+    addBatchAuthCodesHandler(req, res, next);
 })
 
 router.post('/ordermanage/authenticCode/delete', (req, res, next) => {
