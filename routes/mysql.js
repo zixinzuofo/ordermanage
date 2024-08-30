@@ -1098,7 +1098,7 @@ exports.addAuthCode = function addAuthCode(authenticCode, productInfo, userName)
     });
 }
 
-exports.addBatchAuthCodes = function addBatchAuthCodes(authCoddes, userName) {
+exports.addBatchAuthCodes = function addBatchAuthCodes(authCodes, userName) {
     return new Promise(function (resolve, reject){
         pool.getConnection(function(err, conn){
             if (err) {
