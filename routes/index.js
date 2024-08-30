@@ -1982,7 +1982,7 @@ router.post('/ordermanage/authenticCode/query', (req, res, next) => {
     queryAuthCodeHandler(req, res, next);
 })
 
-router.post('/ordermanage/authenticCode/query', (req, res, next) => {
+router.post('/ordermanage/authenticCode/query/number', (req, res, next) => {
     queryAuthCodesByNumHandler(req, res, next);
 })
 
