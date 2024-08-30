@@ -1083,8 +1083,8 @@ exports.addAuthCode = function addAuthCode(authenticCode, productInfo, userName)
             if (err) {
                 reject(err);
             } else {
-                var sql = 'insert into authentic_code_tbl (authenticCode, productInfo, creator) values (?, ?, ?)';
-                sqlParams = [authenticCode, productInfo, userName]
+                var sql = 'insert into authentic_code_tbl (authenticCode, productInfo, creator, updator) values (?, ?, ?, ?)';
+                sqlParams = [authenticCode, productInfo, userName, userName]
                 conn.query(sql, sqlParams, function (err) {
                     conn.release();
                     if (err) {
