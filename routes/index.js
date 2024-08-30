@@ -1780,6 +1780,42 @@ function queryAuthCodesByNumHandler(req, res, next) {
     });
 }
 
+function queryBatchAuthCodesHandler(req, res, next) {
+    log.debug('req headers:', req.headers);
+    var body = req.body;
+    log.debug('req body:', body);
+    var authCodes = body.authCodes;
+    log.debug("authCodes:", authCodes);
+    tk.verifyToken(req.headers.authorization).catch(e => {
+        log.error('fail to verify token:', e);
+        res.send({'ret':errToken, 'msg':errcode.errToken});
+        return new Promise(()=>{});
+    }).then((data)=>{
+        if (body.userName != data.userName) {
+            log.debug('req userName:', body.userName);
+            log.debug('parsed userName:', data.userName)
+            ret = errUserNotMatch;
+            msg = errcode.errUserNotMatch;
+            log.error('fail to query batch authenticCodes:', {'ret':ret, 'msg':msg});
+            res.send({'ret':ret, 'msg':msg});
+            return new Promise(()=>{});
+        }
+        return mysql.queryBatchAuthCodes(authCodes);
+    }).then((data)=>{
+        changeAuthCodeTimeZone(data);
+        log.debug('length of authenticCodes:', data.length);
+        var ret = success;
+        var msg = errcode.success;
+        log.debug('query batch authenticCodes success')
+        res.send({'ret': ret, 'msg': msg, 'data': data});
+    }).catch(function(err){
+        var ret = errMysql;
+        var msg = err.message;
+        log.error('fail to query batch authenticCodes:', {'ret':ret, 'msg':msg});
+        res.send({'ret':ret, 'msg':msg});
+    });
+}
+
 function queryAllAuthCodesHandler(req, res, next) {
     log.debug('req headers:', req.headers);
     var body = req.body;
@@ -2068,6 +2104,10 @@ router.post('/ordermanage/authenticCode/query', (req, res, next) => {
 
 router.post('/ordermanage/authenticCode/query/number', (req, res, next) => {
     queryAuthCodesByNumHandler(req, res, next);
+})
+
+router.post('/ordermanage/authenticCode/query/batch', (req, res, next) => {
+    queryBatchAuthCodes(req, res, next);
 })
 
 router.post('/ordermanage/authenticCode/query/all', (req, res, next) => {

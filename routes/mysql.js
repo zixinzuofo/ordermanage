@@ -1253,6 +1253,27 @@ exports.queryAuthCodeByNum = function queryAuthCodeByNum(number) {
     });
 }
 
+exports.queryBatchAuthCodes = function queryBatchAuthCodes(authCodes) {
+    return new Promise(function (resolve, reject){
+        pool.getConnection(function(err, conn){
+            if (err) {
+                reject(err);
+            } else {
+                var sql = 'select * from authentic_code_tbl where authenticCode in (?)';
+                sqlParams = [authCodes];
+                conn.query(sql, sqlParams, function (err, results) {
+                    conn.release();
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(results);
+                    }
+                });
+            }
+        });
+    });
+}
+
 exports.queryAllAuthCodes = function queryAllAuthCodes() {
     return new Promise(function (resolve, reject){
         pool.getConnection(function(err, conn){
