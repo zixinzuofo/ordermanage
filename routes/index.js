@@ -1506,7 +1506,7 @@ function addAuthCodeHandler(req, res, next) {
             res.send({'ret':ret, 'msg':msg});
             return new Promise(()=>{});
         }
-        return mysql.addAuthCode(authenticCode, productInfo);
+        return mysql.addAuthCode(authenticCode, productInfo, body.userName);
     }).then(()=>{
         var ret = success;
         var msg = errcode.success;

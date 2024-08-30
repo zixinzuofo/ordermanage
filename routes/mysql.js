@@ -1077,14 +1077,14 @@ exports.updateOrderFlag = function updateOrderFlag(userName, id, orderFlag){
     });
 }
 
-exports.addAuthCode = function addAuthCode(authenticCode, productInfo) {
+exports.addAuthCode = function addAuthCode(authenticCode, productInfo, userName) {
     return new Promise(function (resolve, reject){
         pool.getConnection(function(err, conn){
             if (err) {
                 reject(err);
             } else {
-                var sql = 'insert into authentic_code_tbl (authenticCode, productInfo) values (?, ?)';
-                sqlParams = [authenticCode, productInfo]
+                var sql = 'insert into authentic_code_tbl (authenticCode, productInfo, creator) values (?, ?, ?)';
+                sqlParams = [authenticCode, productInfo, userName]
                 conn.query(sql, sqlParams, function (err) {
                     conn.release();
                     if (err) {
