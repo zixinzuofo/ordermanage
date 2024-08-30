@@ -1792,7 +1792,7 @@ function updateAuthCodeAvailabilityHandler(req, res, next) {
             res.send({'ret':ret, 'msg':msg});
             return new Promise(()=>{});
         }
-        return mysql.updateAuthCodeAvailability(authenticCode, availability);
+        return mysql.updateAuthCodeAvailability(authenticCode, availability, body.userName);
     }).then((data)=>{
         var ret = success;
         var msg = errcode.success;

@@ -1229,14 +1229,14 @@ exports.queryAllAuthCodes = function queryAllAuthCodes() {
     });
 }
 
-exports.updateAuthCodeAvailability = function updateAuthCodeAvailability(authenticCode, availability) {
+exports.updateAuthCodeAvailability = function updateAuthCodeAvailability(authenticCode, availability, userName) {
     return new Promise(function (resolve, reject){
         pool.getConnection(function(err, conn){
             if (err) {
                 reject(err);
             } else {
-                var sql = 'update authentic_code_tbl set availability = ? where binary authenticCode = ?';
-                sqlParams = [availability, authenticCode];
+                var sql = 'update authentic_code_tbl set availability = ?, updator = ? where binary authenticCode = ?';
+                sqlParams = [availability, userName, authenticCode];
                 conn.query(sql, sqlParams, function (err, results) {
                     conn.release();
                     if (err) {
