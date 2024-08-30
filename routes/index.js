@@ -2107,7 +2107,7 @@ router.post('/ordermanage/authenticCode/query/number', (req, res, next) => {
 })
 
 router.post('/ordermanage/authenticCode/query/batch', (req, res, next) => {
-    queryBatchAuthCodes(req, res, next);
+    queryBatchAuthCodesHandler(req, res, next);
 })
 
 router.post('/ordermanage/authenticCode/query/all', (req, res, next) => {
