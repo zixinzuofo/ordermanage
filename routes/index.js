@@ -1584,7 +1584,7 @@ function updateAuthCodeProdInfoHandler(req, res, next) {
             res.send({'ret':ret, 'msg':msg});
             return new Promise(()=>{});
         }
-        return mysql.updateAuthCodeProdInfo(authenticCode, productInfo);
+        return mysql.updateAuthCodeProdInfo(authenticCode, productInfo, body.userName);
     }).then(()=>{
         var ret = success;
         var msg = errcode.success;
@@ -1620,7 +1620,7 @@ function updateAuthCodeStatusHandler(req, res, next) {
             res.send({'ret':ret, 'msg':msg});
             return new Promise(()=>{});
         }
-        return mysql.updateAuthCodeStatus(authenticCode, status);
+        return mysql.updateAuthCodeStatus(authenticCode, status, body.userName);
     }).then((data)=>{
         var ret = success;
         var msg = errcode.success;
@@ -1642,7 +1642,7 @@ function updateAuthCodeStatusNoAuthHandler(req, res, next) {
     var status = body.status;
     log.debug("authenticCode:", authenticCode);
     log.debug("status:", status);
-    mysql.updateAuthCodeStatus(authenticCode, status).then((data)=>{
+    mysql.updateAuthCodeStatusNoAuth(authenticCode, status).then((data)=>{
         var ret = success;
         var msg = errcode.success;
         log.debug('update authCodeStatus success')

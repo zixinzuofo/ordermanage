@@ -1121,14 +1121,14 @@ exports.deleteAuthCode = function deleteAuthCode(authenticCode) {
     });
 }
 
-exports.updateAuthCodeProdInfo = function updateAuthCodeProdInfo(authenticCode, productInfo) {
+exports.updateAuthCodeProdInfo = function updateAuthCodeProdInfo(authenticCode, productInfo, userName) {
     return new Promise(function (resolve, reject){
         pool.getConnection(function(err, conn){
             if (err) {
                 reject(err);
             } else {
-                var sql = 'update authentic_code_tbl set productInfo = ? where binary authenticCode = ?';
-                sqlParams = [productInfo, authenticCode];
+                var sql = 'update authentic_code_tbl set productInfo = ?, updator = ? where binary authenticCode = ?';
+                sqlParams = [productInfo, userName, authenticCode];
                 conn.query(sql, sqlParams, function (err, results) {
                     conn.release();
                     if (err) {
@@ -1144,7 +1144,30 @@ exports.updateAuthCodeProdInfo = function updateAuthCodeProdInfo(authenticCode, 
     });
 }
 
-exports.updateAuthCodeStatus = function updateAuthCodeStatus(authenticCode, status) {
+exports.updateAuthCodeStatus = function updateAuthCodeStatus(authenticCode, status, userName) {
+    return new Promise(function (resolve, reject){
+        pool.getConnection(function(err, conn){
+            if (err) {
+                reject(err);
+            } else {
+                var sql = 'update authentic_code_tbl set status = ?, updator = ? where binary authenticCode = ?';
+                sqlParams = [status, userName, authenticCode];
+                conn.query(sql, sqlParams, function (err, results) {
+                    conn.release();
+                    if (err) {
+                        reject(err);
+                    } else if (results.affectedRows === 0) {
+                        reject(new Error('No rows were updated. The authenticCode may not exist or the status is already set as requested.'));
+                    } else {
+                        resolve();
+                    }
+                });
+            }
+        });
+    });
+}
+
+exports.updateAuthCodeStatusNoAuth = function updateAuthCodeStatusNoAuth(authenticCode, status) {
     return new Promise(function (resolve, reject){
         pool.getConnection(function(err, conn){
             if (err) {
