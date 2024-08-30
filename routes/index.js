@@ -25,6 +25,14 @@ function changeTimeZone(data) {
     return data;
 }
 
+function changeAuthCodeTimeZone(data) {
+    for(var i = 0; i < data.length; i++){
+        data[i].createTime = utils.convertTimeToCST(data[i].createTime);
+        data[i].updateTime = utils.convertTimeToCST(data[i].updateTime);
+    }
+    return data;
+}
+
 function loginHandler(req, res, next) {
     log.debug('req headers:', req.headers);
     var body = req.body;
@@ -1654,6 +1662,7 @@ function queryAuthCodeNoAuthHandler(req, res, next) {
     var authenticCode = body.authenticCode
     log.debug("authenticCode:", authenticCode);
     mysql.queryAuthCode(authenticCode).then((data)=>{
+        changeAuthCodeTimeZone(data);
         log.debug('authenticCode:', data);
         var ret = success;
         var msg = errcode.success;
@@ -1689,6 +1698,7 @@ function queryAuthCodeHandler(req, res, next) {
         }
         return mysql.queryAuthCode(authenticCode);
     }).then((data)=>{
+        changeAuthCodeTimeZone(data);
         log.debug('authenticCode:', data);
         var ret = success;
         var msg = errcode.success;
@@ -1724,6 +1734,7 @@ function queryAuthCodesByNumHandler(req, res, next) {
         }
         return mysql.queryAuthCodeByNum(number);
     }).then((data)=>{
+        changeAuthCodeTimeZone(data);
         log.debug('authenticCodes:', data);
         var ret = success;
         var msg = errcode.success;
@@ -1757,6 +1768,7 @@ function queryAllAuthCodesHandler(req, res, next) {
         }
         return mysql.queryAllAuthCodes();
     }).then((data)=>{
+        changeAuthCodeTimeZone(data);
         log.debug('length of authenticCodes:', data.length);
         var ret = success;
         var msg = errcode.success;
