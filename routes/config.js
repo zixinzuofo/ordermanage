@@ -171,6 +171,10 @@ module.exports = {
                   `productInfo` varchar(256) NOT NULL DEFAULT '',\
                   `status` ENUM('activated','nonactivated') NOT NULL DEFAULT 'nonactivated',\
                   `availability` ENUM('yes','no') NOT NULL DEFAULT 'yes',\
+                  `createTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,\
+                  `updateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\
+                  `creator` varchar(64) DEFAULT NULL,\
+                  `updator` varchar(64) DEFAULT NULL,\
                   PRIMARY KEY (`id`),\
                   UNIQUE KEY `authenticCode` (`authenticCode`)\
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8"

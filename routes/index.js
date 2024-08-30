@@ -1484,7 +1484,7 @@ function queryPaymentMethodHandler(req, res, next) {
     });
 }
 
-function addAuthenticCodeHandler(req, res, next) {
+function addAuthCodeHandler(req, res, next) {
     log.debug('req headers:', req.headers);
     var body = req.body;
     log.debug('req body:', body);
@@ -1506,7 +1506,7 @@ function addAuthenticCodeHandler(req, res, next) {
             res.send({'ret':ret, 'msg':msg});
             return new Promise(()=>{});
         }
-        return mysql.addAuthenticCode(authenticCode, productInfo);
+        return mysql.addAuthCode(authenticCode, productInfo);
     }).then(()=>{
         var ret = success;
         var msg = errcode.success;
@@ -1520,7 +1520,7 @@ function addAuthenticCodeHandler(req, res, next) {
     });
 }
 
-function deleteAuthenticCodeHandler(req, res, next) {
+function deleteAuthCodeHandler(req, res, next) {
     log.debug('req headers:', req.headers);
     var body = req.body;
     log.debug('req body:', body);
@@ -1540,7 +1540,7 @@ function deleteAuthenticCodeHandler(req, res, next) {
             res.send({'ret':ret, 'msg':msg});
             return new Promise(()=>{});
         }
-        return mysql.deleteAuthenticCode(authenticCode);
+        return mysql.deleteAuthCode(authenticCode);
     }).then(()=>{
         var ret = success;
         var msg = errcode.success;
@@ -1647,13 +1647,13 @@ function updateAuthCodeStatusNoAuthHandler(req, res, next) {
     });
 }
 
-function queryAuthenticCodeNoAuthHandler(req, res, next) {
+function queryAuthCodeNoAuthHandler(req, res, next) {
     log.debug('req headers:', req.headers);
     var body = req.body;
     log.debug('req body:', body);
     var authenticCode = body.authenticCode
     log.debug("authenticCode:", authenticCode);
-    mysql.queryAuthenticCode(authenticCode).then((data)=>{
+    mysql.queryAuthCode(authenticCode).then((data)=>{
         log.debug('authenticCode:', data);
         var ret = success;
         var msg = errcode.success;
@@ -1667,7 +1667,7 @@ function queryAuthenticCodeNoAuthHandler(req, res, next) {
     });
 }
 
-function queryAuthenticCodeHandler(req, res, next) {
+function queryAuthCodeHandler(req, res, next) {
     log.debug('req headers:', req.headers);
     var body = req.body;
     log.debug('req body:', body);
@@ -1687,7 +1687,7 @@ function queryAuthenticCodeHandler(req, res, next) {
             res.send({'ret':ret, 'msg':msg});
             return new Promise(()=>{});
         }
-        return mysql.queryAuthenticCode(authenticCode);
+        return mysql.queryAuthCode(authenticCode);
     }).then((data)=>{
         log.debug('authenticCode:', data);
         var ret = success;
@@ -1702,7 +1702,42 @@ function queryAuthenticCodeHandler(req, res, next) {
     });
 }
 
-function queryAllAuthenticCodesHandler(req, res, next) {
+function queryAuthCodesByNumHandler(req, res, next) {
+    log.debug('req headers:', req.headers);
+    var body = req.body;
+    log.debug('req body:', body);
+    var number = body.number
+    log.debug("number:", number);
+    tk.verifyToken(req.headers.authorization).catch(e => {
+        log.error('fail to verify token:', e);
+        res.send({'ret':errToken, 'msg':errcode.errToken});
+        return new Promise(()=>{});
+    }).then((data)=>{
+        if (body.userName != data.userName) {
+            log.debug('req userName:', body.userName);
+            log.debug('parsed userName:', data.userName)
+            ret = errUserNotMatch;
+            msg = errcode.errUserNotMatch;
+            log.error('fail to query authenticCodes by number:', {'ret':ret, 'msg':msg});
+            res.send({'ret':ret, 'msg':msg});
+            return new Promise(()=>{});
+        }
+        return mysql.queryAuthCodeByNum(number);
+    }).then((data)=>{
+        log.debug('authenticCodes:', data);
+        var ret = success;
+        var msg = errcode.success;
+        log.debug('query authenticCodes by number success')
+        res.send({'ret': ret, 'msg': msg, 'data': data});
+    }).catch(function(err){
+        var ret = errMysql;
+        var msg = err.message;
+        log.error('fail to query authenticCodes by number:', {'ret':ret, 'msg':msg});
+        res.send({'ret':ret, 'msg':msg});
+    });
+}
+
+function queryAllAuthCodesHandler(req, res, next) {
     log.debug('req headers:', req.headers);
     var body = req.body;
     log.debug('req body:', body);
@@ -1720,7 +1755,7 @@ function queryAllAuthenticCodesHandler(req, res, next) {
             res.send({'ret':ret, 'msg':msg});
             return new Promise(()=>{});
         }
-        return mysql.queryAllAuthenticCodes();
+        return mysql.queryAllAuthCodes();
     }).then((data)=>{
         log.debug('length of authenticCodes:', data.length);
         var ret = success;
@@ -1920,11 +1955,11 @@ router.post('/ordermanage/paymentMethod/query', (req, res, next) => {
 })
 
 router.post('/ordermanage/authenticCode/add', (req, res, next) => {
-    addAuthenticCodeHandler(req, res, next);
+    addAuthCodeHandler(req, res, next);
 })
 
 router.post('/ordermanage/authenticCode/delete', (req, res, next) => {
-    deleteAuthenticCodeHandler(req, res, next);
+    deleteAuthCodeHandler(req, res, next);
 })
 
 router.post('/ordermanage/authenticCode/productInfo/update', (req, res, next) => {
@@ -1940,15 +1975,19 @@ router.post('/ordermanage/authenticCode/status/noauth/update', (req, res, next) 
 })
 
 router.post('/ordermanage/authenticCode/noauth/query', (req, res, next) => {
-    queryAuthenticCodeNoAuthHandler(req, res, next);
+    queryAuthCodeNoAuthHandler(req, res, next);
 })
 
 router.post('/ordermanage/authenticCode/query', (req, res, next) => {
-    queryAuthenticCodeHandler(req, res, next);
+    queryAuthCodeHandler(req, res, next);
+})
+
+router.post('/ordermanage/authenticCode/query', (req, res, next) => {
+    queryAuthCodesByNumHandler(req, res, next);
 })
 
 router.post('/ordermanage/authenticCode/query/all', (req, res, next) => {
-    queryAllAuthenticCodesHandler(req, res, next);
+    queryAllAuthCodesHandler(req, res, next);
 })
 
 router.post('/ordermanage/authenticCode/availability/update', (req, res, next) => {
