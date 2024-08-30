@@ -1295,3 +1295,26 @@ exports.updateAuthCodeAvailability = function updateAuthCodeAvailability(authent
         });
     });
 }
+
+exports.updateBatchAuthCodesAvailability = function updateBatchAuthCodesAvailability(authCodes, availability, userName) {
+    return new Promise(function (resolve, reject){
+        pool.getConnection(function(err, conn){
+            if (err) {
+                reject(err);
+            } else {
+                var sql = 'update authentic_code_tbl set availability = ?, updator = ? where binary authenticCode in (?)';
+                sqlParams = [availability, userName, authCodes];
+                conn.query(sql, sqlParams, function (err, results) {
+                    conn.release();
+                    if (err) {
+                        reject(err);
+                    } else if (results.affectedRows === 0) {
+                        reject(new Error('No rows were updated. The authenticCode may not exist or the availability is already set as requested.'));
+                    } else {
+                        resolve();
+                    }
+                });
+            }
+        });
+    });
+}
