@@ -1142,6 +1142,29 @@ exports.deleteAuthCode = function deleteAuthCode(authenticCode) {
     });
 }
 
+exports.deleteBatchAuthCodes = function deleteBatchAuthCodes(authCodes) {
+    return new Promise(function (resolve, reject){
+        pool.getConnection(function(err, conn){
+            if (err) {
+                reject(err);
+            } else {
+                var sql = 'delete from authentic_code_tbl where binary authenticCode in (?)';
+                sqlParams = [authCodes];
+                conn.query(sql, sqlParams, function (err, results) {
+                    conn.release();
+                    if (err) {
+                        reject(err);
+                    } else if (results.affectedRows === 0) {
+                        reject(new Error('No rows were deleted. The authenticCode may not exist.'));
+                    } else {
+                        resolve();
+                    }
+                });
+            }
+        });
+    });
+}
+
 exports.updateAuthCodeProdInfo = function updateAuthCodeProdInfo(authenticCode, productInfo, userName) {
     return new Promise(function (resolve, reject){
         pool.getConnection(function(err, conn){

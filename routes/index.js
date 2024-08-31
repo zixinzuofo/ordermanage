@@ -1594,6 +1594,40 @@ function deleteAuthCodeHandler(req, res, next) {
     });
 }
 
+function deleteBatchAuthCodesHandler(req, res, next) {
+    log.debug('req headers:', req.headers);
+    var body = req.body;
+    log.debug('req body:', body);
+    var authCodes = body.authCodes;
+    log.debug("authCodes:", authCodes);
+    tk.verifyToken(req.headers.authorization).catch(e => {
+        log.error('fail to verify token:', e);
+        res.send({'ret':errToken, 'msg':errcode.errToken});
+        return new Promise(()=>{});
+    }).then((data)=>{
+        if (body.userName != data.userName) {
+            log.debug('req userName:', body.userName);
+            log.debug('parsed userName:', data.userName)
+            ret = errUserNotMatch;
+            msg = errcode.errUserNotMatch;
+            log.error('fail to delete authCodes:', {'ret':ret, 'msg':msg});
+            res.send({'ret':ret, 'msg':msg});
+            return new Promise(()=>{});
+        }
+        return mysql.deleteBatchAuthCodes(authCodes);
+    }).then(()=>{
+        var ret = success;
+        var msg = errcode.success;
+        log.debug('delete authCodes success')
+        res.send({'ret': ret, 'msg': msg});
+    }).catch(function(err){
+        var ret = errMysql;
+        var msg = err.message;
+        log.error('fail to delete authCodes:', {'ret':ret, 'msg':msg});
+        res.send({'ret':ret, 'msg':msg});
+    });
+}
+
 function updateAuthCodeProdInfoHandler(req, res, next) {
     log.debug('req headers:', req.headers);
     var body = req.body;
@@ -2080,6 +2114,10 @@ router.post('/ordermanage/authenticCode/add/batch', (req, res, next) => {
 
 router.post('/ordermanage/authenticCode/delete', (req, res, next) => {
     deleteAuthCodeHandler(req, res, next);
+})
+
+router.post('/ordermanage/authenticCode/delete/batch', (req, res, next) => {
+    deleteBatchAuthCodesHandler(req, res, next);
 })
 
 router.post('/ordermanage/authenticCode/productInfo/update', (req, res, next) => {
