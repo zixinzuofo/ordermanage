@@ -1105,8 +1105,8 @@ exports.addBatchAuthCodes = function addBatchAuthCodes(authCodes, userName) {
                 reject(err);
             } else {
                 var sql = 'insert into authentic_code_tbl (authenticCode, productInfo, creator, updator) values ?';
-                var sqlParams = authCodes.map(code => [code.authenticCode, code.productInfo, userName, userName]);
-                conn.query(sql, [sqlParams], function (err) {
+                var sqlParams = [authCodes.map(code => [code.authenticCode, code.productInfo, userName, userName])];
+                conn.query(sql, sqlParams, function (err) {
                     conn.release();
                     if (err) {
                         reject(err);
