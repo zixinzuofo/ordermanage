@@ -1801,7 +1801,7 @@ function queryAuthCodesByNumHandler(req, res, next) {
         return mysql.queryAuthCodeByNum(number);
     }).then((data)=>{
         changeAuthCodeTimeZone(data);
-        log.debug('authenticCodes:', data);
+        // log.debug('authenticCodes:', data.map(code => [code.authenticCode]));
         var ret = success;
         var msg = errcode.success;
         log.debug('query authenticCodes by number success')
