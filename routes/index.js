@@ -1805,7 +1805,7 @@ function queryAuthCodesByNumHandler(req, res, next) {
         var ret = success;
         var msg = errcode.success;
         log.debug('query authenticCodes by number success')
-        res.send({'ret': ret, 'msg': msg, 'data': data});
+        res.send({'ret': ret, 'msg': msg, 'count': data.length, 'data': data});
     }).catch(function(err){
         var ret = errMysql;
         var msg = err.message;
@@ -1841,7 +1841,7 @@ function queryBatchAuthCodesHandler(req, res, next) {
         var ret = success;
         var msg = errcode.success;
         log.debug('query batch authenticCodes success')
-        res.send({'ret': ret, 'msg': msg, 'data': data});
+        res.send({'ret': ret, 'msg': msg, 'count': data.length, 'data': data});
     }).catch(function(err){
         var ret = errMysql;
         var msg = err.message;
@@ -1875,7 +1875,7 @@ function queryAllAuthCodesHandler(req, res, next) {
         var ret = success;
         var msg = errcode.success;
         log.debug('query all authenticCodes success')
-        res.send({'ret': ret, 'msg': msg, 'data': data});
+        res.send({'ret': ret, 'msg': msg, 'count': data.length, 'data': data});
     }).catch(function(err){
         var ret = errMysql;
         var msg = err.message;
