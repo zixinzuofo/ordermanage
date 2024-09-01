@@ -167,7 +167,7 @@ module.exports = {
                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8",
     authenticCodeTblSql: "CREATE TABLE if not exists `authentic_code_tbl` (\
                   `id` int unsigned NOT NULL AUTO_INCREMENT,\
-                  `authenticCode` varchar(256) NOT NULL,\
+                  `authenticCode` varchar(256) NOT NULL CHARACTER SET utf8 COLLATE utf8_bin,\
                   `productInfo` varchar(256) NOT NULL DEFAULT '',\
                   `status` ENUM('activated','nonactivated') NOT NULL DEFAULT 'nonactivated',\
                   `availability` ENUM('yes','no') NOT NULL DEFAULT 'yes',\
