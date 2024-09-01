@@ -1369,8 +1369,13 @@ exports.queryAuthCodeIndexes = function queryAuthCodeIndexes() {
             if (err) {
                 reject(err);
             } else {
-                var sql = 'SELECT (SELECT COUNT(*) FROM authentic_code_tbl WHERE status = "activated") AS activatedCount, \
-                          (SELECT COUNT(*) FROM authentic_code_tbl WHERE availability = "no") AS unavailableCount';
+                var sql = 'SELECT \
+                              COUNT(CASE WHEN status = "activated" THEN 1 END) AS activatedCount, \
+                              COUNT(CASE WHEN status = "nonactivated" THEN 1 END) AS nonactivatedCount, \
+                              COUNT(CASE WHEN availability = "yes" THEN 1 END) AS availableCount, \
+                              COUNT(CASE WHEN availability = "no" THEN 1 END) AS unavailableCount \
+                            FROM \
+                              authentic_code_tbl;';
                 conn.query(sql, function (err, results) {
                     conn.release();
                     if (err) {
