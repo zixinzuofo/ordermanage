@@ -1980,7 +1980,7 @@ function queryAuthCodeIndexesHandler(req, res, next) {
         var ret = success;
         var msg = errcode.success;
         log.debug('query authCodeIndexes success')
-        res.send({'ret': ret, 'msg': msg, 'data': data[0]});
+        res.send({'ret': ret, 'msg': msg, ...data[0]}); // ...展开运算符
     }).catch(function(err){
         var ret = errMysql;
         var msg = err.message;
