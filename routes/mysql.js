@@ -1362,3 +1362,24 @@ exports.updateBatchAuthCodesAvailability = function updateBatchAuthCodesAvailabi
         });
     });
 }
+
+exports.queryAuthCodeIndexes = function queryAuthCodeIndexes() {
+    return new Promise(function (resolve, reject){
+        pool.getConnection(function(err, conn){
+            if (err) {
+                reject(err);
+            } else {
+                var sql = 'SELECT (SELECT COUNT(*) FROM authentic_code_tbl WHERE status = "activated") AS activatedCount, \
+                          (SELECT COUNT(*) FROM authentic_code_tbl WHERE availability = "no") AS unavailableCount';
+                conn.query(sql, function (err, results) {
+                    conn.release();
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(results);
+                    }
+                });
+            }
+        });
+    });
+}

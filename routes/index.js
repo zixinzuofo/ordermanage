@@ -1956,6 +1956,38 @@ function updateBatchAuthCodesAvailabilityHandler(req, res, next) {
     });
 }
 
+function queryAuthCodeIndexesHandler(req, res, next) {
+    log.debug('req headers:', req.headers);
+    var body = req.body;
+    log.debug('req body:', body);
+    tk.verifyToken(req.headers.authorization).catch(e => {
+        log.error('fail to verify token:', e);
+        res.send({'ret':errToken, 'msg':errcode.errToken});
+        return new Promise(()=>{});
+    }).then((data)=>{
+        if (body.userName != data.userName) {
+            log.debug('req userName:', body.userName);
+            log.debug('parsed userName:', data.userName)
+            ret = errUserNotMatch;
+            msg = errcode.errUserNotMatch;
+            log.error('fail to query authCodeIndexes:', {'ret':ret, 'msg':msg});
+            res.send({'ret':ret, 'msg':msg});
+            return new Promise(()=>{});
+        }
+        return mysql.queryAuthCodeIndexes();
+    }).then((data)=>{
+        var ret = success;
+        var msg = errcode.success;
+        log.debug('query authCodeIndexes success')
+        res.send({'ret': ret, 'msg': msg, 'activatedCount': data[0].activatedCount, 'unavailableCount':data[0].unavailableCount});
+    }).catch(function(err){
+        var ret = errMysql;
+        var msg = err.message;
+        log.error('fail to query authCodeIndexes:', {'ret':ret, 'msg':msg});
+        res.send({'ret':ret, 'msg':msg});
+    });
+}
+
 router.post('/ordermanage/login', (req, res, next) => {
     loginHandler(req, res, next);
 });
@@ -2158,6 +2190,10 @@ router.post('/ordermanage/authenticCode/availability/update', (req, res, next) =
 
 router.post('/ordermanage/authenticCode/availability/update/batch', (req, res, next) => {
     updateBatchAuthCodesAvailabilityHandler(req, res, next);
+})
+
+router.post('/ordermanage/authenticCode/Indexes/query', (req, res, next) => {
+    queryAuthCodeIndexesHandler(req, res, next);
 })
 
 module.exports = router;
