@@ -1976,6 +1976,7 @@ function queryAuthCodeIndexesHandler(req, res, next) {
         }
         return mysql.queryAuthCodeIndexes();
     }).then((data)=>{
+        log.debug('authCodeIndexes:', data[0])
         var ret = success;
         var msg = errcode.success;
         log.debug('query authCodeIndexes success')
