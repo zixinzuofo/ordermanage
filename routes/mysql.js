@@ -1346,16 +1346,32 @@ exports.updateBatchAuthCodesAvailability = function updateBatchAuthCodesAvailabi
             if (err) {
                 reject(err);
             } else {
-                var sql = 'update authentic_code_tbl set availability = ?, updator = ? where binary authenticCode in (?)';
-                sqlParams = [availability, userName, authCodes];
-                conn.query(sql, sqlParams, function (err, results) {
-                    conn.release();
+                // 首先检查所有authCodes是否存在
+                var checkSql = 'SELECT COUNT(*) as count FROM authentic_code_tbl WHERE binary authenticCode IN (?)';
+                conn.query(checkSql, [authCodes], function (err, results) {
                     if (err) {
+                        conn.release();
                         reject(err);
-                    } else if (results.affectedRows === 0) {
-                        reject(new Error('No rows were updated. The authenticCode may not exist or the availability is already set as requested.'));
                     } else {
-                        resolve();
+                        var count = results[0].count;
+                        if (count !== authCodes.length) {
+                            // 如果查询到的数量不等于传入的数量，说明有不存在于表中的authCodes
+                            conn.release();
+                            reject(new Error('One or more authenticCodes do not exist in the table.'));
+                        } else {
+                            // 所有authCodes都存在，执行更新操作
+                            var sql = 'UPDATE authentic_code_tbl SET availability = ?, updator = ? WHERE binary authenticCode IN (?)';
+                            conn.query(sql, [availability, userName, authCodes], function (err, updateResults) {
+                                conn.release();
+                                if (err) {
+                                    reject(err);
+                                } else if (updateResults.affectedRows === 0) {
+                                    reject(new Error('No rows were updated. The authenticCode may not exist or the availability is already set as requested.'));
+                                } else {
+                                    resolve();
+                                }
+                            });
+                        }
                     }
                 });
             }
