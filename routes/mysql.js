@@ -1341,28 +1341,27 @@ exports.updateAuthCodeAvailability = function updateAuthCodeAvailability(authent
 }
 
 exports.updateBatchAuthCodesAvailability = function updateBatchAuthCodesAvailability(authCodes, availability, userName) {
-    return new Promise(function (resolve, reject){
-        pool.getConnection(function(err, conn){
+    return new Promise(function (resolve, reject) {
+        pool.getConnection(function (err, conn) {
             if (err) {
                 reject(err);
             } else {
-                // 首先检查所有authCodes是否存在
-                var checkSql = 'SELECT COUNT(*) as count FROM authentic_code_tbl WHERE binary authenticCode IN (?)';
+                // 首先找出在表中且在authCodes中的code
+                var checkSql = 'SELECT authenticCode FROM authentic_code_tbl WHERE binary authenticCode IN (?)';
                 conn.query(checkSql, [authCodes], function (err, results) {
+                    conn.release();
                     if (err) {
-                        conn.release();
                         reject(err);
                     } else {
-                        var count = results[0].count;
-                        if (count !== authCodes.length) {
-                            // 如果查询到的数量不等于传入的数量，说明有不存在于表中的authCodes
-                            conn.release();
-                            reject(new Error('One or more authenticCodes do not exist in the table.'));
+                        var existCodes = results.map(result => result.authenticCode);
+                        var missingCodes = authCodes.filter(code => !existCodes.includes(code));
+                        if (missingCodes.length > 0) {
+                            // 如果有不存在于表中的authCodes，拒绝并返回这些codes
+                            reject(new Error('The following authenticCodes do not exist in the table: ' + missingCodes.join(', ')));
                         } else {
                             // 所有authCodes都存在，执行更新操作
-                            var sql = 'UPDATE authentic_code_tbl SET availability = ?, updator = ? WHERE binary authenticCode IN (?)';
-                            conn.query(sql, [availability, userName, authCodes], function (err, updateResults) {
-                                conn.release();
+                            var updateSql = 'UPDATE authentic_code_tbl SET availability = ?, updator = ? WHERE binary authenticCode IN (?)';
+                            conn.query(updateSql, [availability, userName, authCodes], function (err, updateResults) {
                                 if (err) {
                                     reject(err);
                                 } else if (updateResults.affectedRows === 0) {
