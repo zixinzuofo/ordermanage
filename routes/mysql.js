@@ -1354,6 +1354,8 @@ exports.updateBatchAuthCodesAvailability = function updateBatchAuthCodesAvailabi
                         reject(err);
                     } else {
                         var count = results[0].count;
+                        log.debug('count:', count);
+                        log.debug('length of authCodes:', authCodes.length);
                         if (count !== authCodes.length) {
                             // 如果查询到的数量不等于传入的数量，说明有不存在于表中的authCodes
                             conn.release();
