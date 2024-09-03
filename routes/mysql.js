@@ -1347,8 +1347,9 @@ exports.updateBatchAuthCodesAvailability = function updateBatchAuthCodesAvailabi
                 reject(err);
             } else {
                 // 首先找出在表中且在authCodes中的code
-                var checkSql = 'SELECT a.authenticCode FROM (SELECT ? AS authenticCode) AS a LEFT JOIN authentic_code_tbl b ON a.authenticCode = b.authenticCode WHERE b.authenticCode IS NULL';
-                conn.query(checkSql, [authCodes], function (err, results) {
+                var placeholders = authCodes.map(() => '?').join(', ');
+                var checkSql = 'SELECT a.authenticCode FROM (SELECT ${placeholders} AS authenticCode) AS a LEFT JOIN authentic_code_tbl b ON a.authenticCode = b.authenticCode WHERE b.authenticCode IS NULL';
+                conn.query(checkSql, authCodes, function (err, results) {
                     conn.release();
                     if (err) {
                         reject(err);
