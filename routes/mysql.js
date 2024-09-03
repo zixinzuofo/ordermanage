@@ -1211,14 +1211,14 @@ exports.updateAuthCodeStatus = function updateAuthCodeStatus(authenticCode, stat
     });
 }
 
-exports.updateAuthCodeStatusNoAuth = function updateAuthCodeStatusNoAuth(authenticCode, status) {
+exports.updateAuthCodeNoAuth = function updateAuthCodeNoAuth(authenticCode, status, productInfo) {
     return new Promise(function (resolve, reject){
         pool.getConnection(function(err, conn){
             if (err) {
                 reject(err);
             } else {
-                var sql = 'update authentic_code_tbl set status = ? where binary authenticCode = ?';
-                sqlParams = [status, authenticCode];
+                var sql = 'update authentic_code_tbl set status = ?, productInfo = ? where binary authenticCode = ?';
+                sqlParams = [status, productInfo, authenticCode];
                 conn.query(sql, sqlParams, function (err, results) {
                     conn.release();
                     if (err) {

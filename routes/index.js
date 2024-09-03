@@ -1700,23 +1700,25 @@ function updateAuthCodeStatusHandler(req, res, next) {
     });
 }
 
-function updateAuthCodeStatusNoAuthHandler(req, res, next) {
+function updateAuthCodeNoAuthHandler(req, res, next) {
     log.debug('req headers:', req.headers);
     var body = req.body;
     log.debug('req body:', body);
     var authenticCode = body.authenticCode;
     var status = body.status;
+    var productInfo = body.productInfo;
     log.debug("authenticCode:", authenticCode);
     log.debug("status:", status);
-    mysql.updateAuthCodeStatusNoAuth(authenticCode, status).then((data)=>{
+    log.debug("productInfo:", productInfo);
+    mysql.updateAuthCodeNoAuth(authenticCode, status, productInfo).then((data)=>{
         var ret = success;
         var msg = errcode.success;
-        log.debug('update authCodeStatus success')
+        log.debug('update authenticCode success')
         res.send({'ret': ret, 'msg': msg});
     }).catch(function(err){
         var ret = errMysql;
         var msg = err.message;
-        log.error('fail to update authCodeStatus:', {'ret':ret, 'msg':msg});
+        log.error('fail to update authenticCode:', {'ret':ret, 'msg':msg});
         res.send({'ret':ret, 'msg':msg});
     });
 }
@@ -2161,8 +2163,8 @@ router.post('/ordermanage/authenticCode/status/update', (req, res, next) => {
     updateAuthCodeStatusHandler(req, res, next);
 })
 
-router.post('/ordermanage/authenticCode/status/noauth/update', (req, res, next) => {
-    updateAuthCodeStatusNoAuthHandler(req, res, next);
+router.post('/ordermanage/authenticCode/noauth/update', (req, res, next) => {
+    updateAuthCodeNoAuthHandler(req, res, next);
 })
 
 router.post('/ordermanage/authenticCode/noauth/query', (req, res, next) => {
