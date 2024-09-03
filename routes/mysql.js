@@ -1353,6 +1353,7 @@ exports.updateBatchAuthCodesAvailability = function updateBatchAuthCodesAvailabi
                     if (err) {
                         reject(err);
                     } else {
+                        log.debug('check results:', results);
                         var missingCodes = results.map(result => result.authenticCode);
                         if (missingCodes.length > 0) {
                             // 如果有不存在于表中的authCodes，拒绝并返回这些codes
