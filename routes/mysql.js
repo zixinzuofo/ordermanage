@@ -1347,15 +1347,14 @@ exports.updateBatchAuthCodesAvailability = function updateBatchAuthCodesAvailabi
                 reject(err);
             } else {
                 // 首先找出在表中且在authCodes中的code
-                var placeholders = authCodes.map(() => '?').join(', ');
-                var checkSql = 'SELECT a.authenticCode FROM (SELECT ${placeholders} AS authenticCode) AS a LEFT JOIN authentic_code_tbl b ON a.authenticCode = b.authenticCode WHERE b.authenticCode IS NULL';
-                conn.query(checkSql, authCodes, function (err, results) {
+                var checkSql = 'SELECT authenticCode FROM authentic_code_tbl WHERE binary authenticCode IN (?)';
+                conn.query(checkSql, [authCodes], function (err, results) {
                     conn.release();
                     if (err) {
                         reject(err);
                     } else {
-                        log.debug('check results:', results);
-                        var missingCodes = results.map(result => result.authenticCode);
+                        var existCodes = results.map(result => result.authenticCode);
+                        var missingCodes = authCodes.filter(code => !existCodes.includes(code));
                         if (missingCodes.length > 0) {
                             // 如果有不存在于表中的authCodes，拒绝并返回这些codes
                             reject(new Error('The following authenticCodes do not exist in the table: ' + missingCodes.join(', ')));
